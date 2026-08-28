@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Compal FACIM</title>
+
+<style>
+
+
+/* ================================
+   FONTE ELBRUSH
+================================ */
+
+@font-face {
+    font-family: "Elbrush";
+    src: url("fonts/elbrush.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/* ================================
+   PAGINA
+================================ */
+
+body {
+    margin: 0;
+    padding: 20px;
+
+    background: #FFF4F0;
+
+    font-family: "Elbrush", Arial, sans-serif;
+    color: #165d40;
+
+    text-align: center;
+}
+
+h1,
+p,
+label,
+button {
+    font-family: "Elbrush", Arial, sans-serif;
+}
+
+
+/* ================================
+   MENSAGEM DO RESULTADO
+================================ */
+
+.mensagem-resultado {
+    width: 90%;
+    max-width: 620px;
+
+    margin: 20px auto 25px;
+
+    text-align: center;
+}
+
+.mensagem-resultado h1 {
+    margin: 0 0 10px;
+
+    color: #A94F3D;
+
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.mensagem-resultado p {
+    margin: 0;
+
+    color: #A94F3D;
+
+    font-size: 30px;
+    line-height: 1.35;
+}
+
+
+/* ================================
+   EDITOR / MOLDURA
+================================ */
+
+.editor {
+    position: relative;
+
+    width: 675px;
+    max-width: 100%;
+
+    margin: 0 auto;
+
+    overflow: hidden;
+}
+
+.janelaFoto {
+    position: absolute;
+
+    left: 19%;
+    top: 20%;
+
+    width: 62%;
+    height: 54%;
+
+    overflow: hidden;
+
+    z-index: 1;
+
+    border-radius: 35px;
+}
+
+#moldura {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    z-index: 10;
+
+    pointer-events: none;
+}
+
+#fotoNaMoldura {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    z-index: 1;
+
+    display: none;
+
+    touch-action: none;
+    cursor: grab;
+
+    transform-origin: center center;
+}
+
+
+/* ================================
+   FOTO / GALERIA
+================================ */
+
+.botoes-foto {
+    width: 90%;
+    max-width: 380px;
+
+    margin: 25px auto 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.botao {
+    display: flex;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px 24px;
+
+    background: #165d40;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 30px;
+
+    font-family: "Elbrush", Arial, sans-serif;
+
+    font-size: 22px;
+    font-weight: normal;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+}
+
+.botao:hover {
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   ZOOM
+================================ */
+
+label[for="zoom"] {
+    display: block;
+
+    margin: 12px auto 8px;
+
+    color: #A94F3D;
+
+    font-size: 20px;
+}
+
+#zoom {
+    display: block;
+
+    width: 80%;
+    max-width: 340px;
+
+    margin: 0 auto 20px;
+
+    accent-color: #A94F3D;
+
+    cursor: pointer;
+}
+
+
+/* ================================
+   GUARDAR + INSTAGRAM
+================================ */
+
+#guardar,
+#instagram {
+    display: block;
+
+    width: 90%;
+    max-width: 380px;
+
+    box-sizing: border-box;
+
+    margin: 14px auto;
+
+    padding: 15px 24px;
+
+    background: #165d40;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 30px;
+
+    font-family: "Elbrush", Arial, sans-serif;
+
+    font-size: 50px;
+    font-weight: normal;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+}
+
+#guardar:hover,
+#instagram:hover {
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .mensagem-resultado {
+        width: 94%;
+        margin-top: 15px;
+    }
+
+    .mensagem-resultado h1 {
+        font-size: 30px;
+    }
+
+    .mensagem-resultado p {
+        font-size: 19px;
+    }
+
+    .botao,
+    #guardar,
+    #instagram {
+        font-size: 60px;
+    }
+
+}
+
+/* ================================
+   BLOCO CRIAR FOTOGRAFIA
+================================ */
+
+.zona-foto {
+    width: 90%;
+    max-width: 520px;
+
+    box-sizing: border-box;
+
+    margin: 18px auto;
+
+    padding: 28px 25px;
+
+    background: #edf4ef;
+
+    border-radius: 28px;
+
+    text-align: center;
+}
+
+.zona-foto h2 {
+    margin: 0 0 8px;
+
+    font-family: "Elbrush", Arial, sans-serif;
+
+    font-size: 28px;
+    font-weight: normal;
+
+    color: #165d40;
+}
+
+.instrucao {
+    margin: 0 auto 20px;
+
+    font-family: "Elbrush", Arial, sans-serif;
+
+    font-size: 18px;
+
+    color: #165d40;
+}
+
+.ou {
+    display: block;
+
+    color: #165d40;
+
+    font-family: "Elbrush", Arial, sans-serif;
+    font-size: 18px;
+}
+
+.botao-secundario {
+    background: #ffffff;
+    color: #165d40;
+
+    border: 2px solid #165d40;
+}
+
+
+/* ================================
+   ZOOM
+================================ */
+
+.zona-zoom {
+    width: 100%;
+
+    margin-top: 12px;
+    padding-top: 0px;
+
+}
+
+.zona-zoom label {
+    margin-top: 0;
+
+    font-size: 21px;
+}
+
+.zona-zoom #zoom {
+    margin-bottom: 0;
+}
+
+
+/* ================================
+   ZONA FINAL
+================================ */
+
+.zona-final {
+    width: 94%;
+    max-width: 540px;
+
+    box-sizing: border-box;
+
+    margin: 14px auto 30px;
+
+    padding: 30px 25px;
+
+    background: #FAD9D0;
+
+    border-radius: 28px;
+
+    color: #A94F3D;
+border: 2px solid #A94F3D;
+
+    text-align: center;
+}
+
+.zona-final h2 {
+    margin: 0 0 8px;
+
+    font-family: "Elbrush", Arial, sans-serif;
+
+    font-size: 40px;
+    font-weight: normal;
+
+    color: #A94F3D;;
+}
+
+.zona-final p {
+    margin: 0 auto 20px;
+
+    font-family: "Elbrush", Arial, sans-serif;
+
+    font-size: 25px;
+
+    color: #A94F3D;;
+}
+
+
+/* BOTOES DENTRO DA ZONA FINAL */
+
+
+.zona-final #instagram {
+    width: 100%;
+    max-width: 380px;
+
+    margin: 10px auto;
+
+    background: #F7D9D0;
+
+    color: #A94F3D;
+
+    border: 2px solid #176B4C;
+border-radius: 24px;
+
+    box-shadow: none;
+}
+
+
+/* O BOTAO PARTILHAR GANHA MAIS DESTAQUE */
+
+.zona-final #instagram {
+    background: #A94F3D;
+
+    color: #ffffff;
+
+    border-color: #A94F3D;
+border-radius: 24px;
+}
+
+
+/* MENCAO COMPAL */
+
+.zona-final .lembrete {
+    margin-top: 22px;
+    margin-bottom: 0;
+
+    font-size: 30px;
+
+    line-height: 1.3;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+    .zona-foto,
+    .zona-final {
+        width: 96%;
+        padding: 24px 18px;
+        border-radius: 22px;
+    }
+
+    .zona-foto h2,
+    .zona-final h2 {
+        font-size: 26px;
+    }
+
+}
+
+/* A zona final só aparece depois da fotografia */
+
+.escondida {
+    display: none;
+}
+
+.link-compal {
+    color: #A94F3D;
+    font-weight:500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.link-compal:visited {
+    color: #176B4C;
+}
+
+/* LINK INSTAGRAM NO TOPO */
+
+.link-compal-topo {
+    color: #A94F3D ;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+
+/* LINK INSTAGRAM NA CAIXA VERDE */
+
+.link-compal,
+.link-compal:visited {
+    color: #A94F3D;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.link-compal:hover,
+.link-compal-topo:hover {
+    opacity: 0.8;
+}
+``
+
+
+
+.icone-adicionar {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.seta-adicionar {
+    font-size: 25px;
+    line-height: 1;
+}
+``
+
+/* ==================================
+   OPÇÕES DENTRO DA MOLDURA
+================================== */
+
+/* ==================================
+   OPÇÕES DENTRO DA MOLDURA
+================================== */
+
+.opcoes-foto-moldura {
+    posi*ion: absolute;
+    inset* 0;
+
+*   z-index: 20;
+
+    display: flex*
+    flex*direction: column;
+    align*items: center;
+    justify-content* center;
+
+    box-sizing: border-box;
+
+    padding: 35px 22px 20px;
+
+    text-align: center;
+}
+
+
+/* TÍTULO */
+
+.opcoes-foto-moldura h2 {
+    margin: 0 0 8px 0;
+
+    color: #136b4b;
+
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+
+/* SUBTÍTULO */
+
+.opcoes-foto-moldura p {
+    margin: 0 0 22px 0;
+
+    color: #136b4b;
+
+    font-family: inherit;
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+
+/* BOTÕES */
+
+.botao-camera-moldura,
+*botao-galeria-moldura {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 92%;
+    max-width: 260px;
+
+    min-height: 48px;
+
+    box-sizing: border-box;
+
+    padding: 12px 16px;
+
+    border-radius: 25px;
+
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+
+/* BOTÃO CÂMARA */
+
+.botao-camera-moldura {
+    bac*ground: #136b4b;
+
+    color: #ffff*f;
+
+    border: 2px solid #ffff*f;*
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+}
+
+
+/* "OU" */
+
+.ou-moldura {
+    display* block;
+
+    margin: 14px 0;
+
+    color: #136b4b;
+
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1;
+}
+
+
+/* BOTÃO GALERIA */
+
+.botao-galeria-moldura {
+    ba*kground: #ffffff;
+
+    color: #136*4b;
+
+    border: 2px solid #136b4b*
+
+    box-shadow: 0 4px 10px rgba(*, 0, 0, 0.12);
+
+}
+
+/* =========================================
+   OPÇÕES DE FOTO DENTRO DA MOLDURA
+   CORREÇÃO FINAL
+========================================= */
+
+.janelaFoto .opcoes-foto-moldura {
+    position: absolute !important;
+
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    box-sizing: border-box !important;
+
+    z-index: 20 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 35px 18px !important;
+
+    text-align: center !important;
+}
+
+
+/* TÍTULO */
+
+ {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 7px 0 !important;
+
+    padding: 0 !important;
+
+    color: #A94F3D !important;
+
+    font-family: inherit !important;
+    font-size: 38px !important;
+    line-height: 1.2 !important;
+
+    text-align: center !important;
+}
+
+
+/* SUBTÍTULO */
+
+.janelaFoto .opcoes-foto-moldura p {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 24px 0 !important;
+
+    padding: 0 !important;
+
+    color: #A94F3D !important;
+
+    font-family: inherit !important;
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+
+    text-align: center !important;
+}
+
+
+/* OS DOIS BOTÕES */
+
+.janelaFoto .botao-camera-moldura,
+.janelaFoto .botao-galeria-moldura {
+    position: static !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+gap: 10px !important;
+    flex: none !important;
+
+    width: 90% !important;
+    max-width: 250px !important;
+
+    min-height: 48px !important;
+
+    margin: 0 !important;
+
+    padding: 12px 16px !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 24px !important;
+
+    font-family: inherit !important;
+    font-size: 14px !important;
+    line-height: 1.1 !important;
+
+    white-space: nowrap !important;
+
+    text-align: center !important;
+
+    cursor: pointer !important;
+}
+
+
+/* TIRAR FOTOGRAFIA */
+
+.janelaFoto .botao-camera-moldura {
+   background: #A94F3D !important;
+color: #ffffff !important;
+border: 2px solid #A94F3D !important;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.16) !important;
+}
+
+
+
+
+/* ESCOLHER GALERIA */
+
+.janelaFoto .botao-galeria-moldura {
+    background: #ffffff !important;
+
+color: #A94F3D !important;
+
+border: 2px solid #A94F3D !important;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.12) !important;
+}
+
+/* =========================================
+   TAMANHO FINAL - MENU DENTRO DA MOLDURA
+========================================= */
+
+.janelaFoto .opcoes-foto-moldura h2 {
+    font-size: 34px !important;
+font-weight: 500 !important;
+    line-height: 0.5 !important;
+
+    margin-bottom: 10px !important;
+}
+
+
+.janelaFoto .botao-camera-moldura,
+.janelaFoto .botao-galeria-moldura {
+
+    width: 94% !important;
+    max-width: 300px !important;
+
+    min-height: 56px !important;
+
+    padding: 15px 18px !important;
+
+    font-size: 26px !important;
+font-weight: 500 !important;
+
+    border-radius: 28px !important;
+margin-top: 16px !important;
+}
+
+
+
+.janelaFoto:has(#fotoNaMoldura[src]) .opcoes-foto-moldura {
+    display: none !important;
+}
+
+/* ==================================
+   TROCAR FOTOGRAFIA
+================================== */
+
+
+.zona-foto {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    padding: 0 !important;
+    margin: 18px auto !important;
+}
+
+.trocar-fotografia {
+    display: flex !important;
+
+    width: 92% !important;
+    max-width: 420px !important;
+
+    margin: 16px auto 18px !important;
+
+    gap: 12px !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+
+.botao-trocar-foto {
+    display: flex !important;
+
+    flex: 1 !important;
+
+    min-height: 48px !important;
+
+    padding: 11px 14px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 2px solid #136b4b !important;
+    border-radius: 25px !important;
+
+    background: #ffffff !important;
+
+/* ==================================
+   BOTÕES TIRAR / ESCOLHER OUTRA
+================================== */
+
+.trocar-fotografia {
+    display: flex !important;
+
+    width: 90% !important;
+    max-width: 380px !important;
+
+    margin: 18px auto 20px !important;
+
+    gap: 12px !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+
+.trocar-fotografia .botao-trocar-foto {
+    display: flex !important;
+
+    flex: 1 1 0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-height: 48px !important;
+
+    margin: 0 !important;
+    padding: 11px 12px !important;
+
+    box-sizing: border-box !important;
+
+    border: 2px solid #136b4b !important;
+    border-radius: 25px !important;
+
+    background: #ffffff !important;
+    color: #A94F3D !important;
+
+    font-family: inherit !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1.1 !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+
+    cursor: pointer !important;
+
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.14) !important;
+}
+
+/* ==========================================
+   FORCAR BOTOES TIRAR / ESCOLHER OUTRA
+========================================== */
+
+.trocar-fotografia {
+    display: flex !important;
+    flex-direction: row !important;
+
+    width: 92% !important;
+    max-width: 400px !important;
+
+    margin: 18px auto 20px !important;
+    padding: 0 !important;
+
+    gap: 12px !important;
+
+    align-items: stretch !important;
+    justify-content: center !important;
+}
+
+
+.trocar-fotografia label[for="camera"],
+.trocar-fotografia label[for="foto"] {
+
+    display: flex !important;
+
+    flex: 1 1 0 !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 48px !important;
+
+    margin: 0 !important;
+    padding: 12px 10px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 2px solid #136b4b !important;
+    border-radius: 25px !important;
+
+    background: #ffffff !important;
+    color: #A94F3D !important;
+
+    font-family: inherit !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1.1 !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+
+    cursor: pointer !important;
+
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.14) !important;
+}
+ 
+
+/* ==================================
+   TIRAR OUTRA / ESCOLHER OUTRA
+================================== */
+
+.trocar-foto {
+    display: flex !important;
+
+    width: 90% !important;
+    max-width: 390px !important;
+
+    margin: 18px auto 20px !important;
+
+    gap: 12px !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+
+.trocar-foto-botao {
+    display: flex !important;
+
+    flex: 1 1 0 !important;
+
+    min-height: 48px !important;
+
+    margin: 0 !important;
+    padding: 11px 12px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 2px solid #136b4b !important;
+    border-radius: 25px !important;
+
+    background: #ffffff !important;
+    color: #A94F3D !important;
+
+    font-family: inherit !important;
+
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1.1 !important;
+
+    text-align: center !important;
+
+    cursor: pointer !important;
+
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.13) !important;
+}
+
+.botao-feito {
+    display: flex !important;
+
+    width: 90% !important;
+    max-width: 360px !important;
+
+    min-height: 58px !important;
+
+    margin: 24px auto 8px !important;
+    padding: 14px 24px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: none !important;
+    border-radius: 30px !important;
+
+    background: #136b4b !important;
+    color: #ffffff !important;
+
+    font-family: inherit !important;
+    font-size: 30px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+
+    text-align: center !important;
+
+    cursor: pointer !important;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18) !important;
+}
+
+
+/* ==========================
+   REDES SOCIAIS
+========================== */
+
+.redes-sociais {
+    display: b*ock !important;
+
+    width: 100% !*mportant;
+
+    margin: 30px auto 1*px !important;
+
+    text-align: ce*ter !important;
+
+    color: #176B4* !important;
+}
+
+
+.redes-sociais p *
+    display: block !important;
+
+ *  margin: 0 0 16px !important;
+
+  * color: #176B4C !important;
+
+    f*nt-family: inherit !important;
+   *font-size: 18px !important;
+    fo*t-weight: 600 !important;
+}
+
+
+.ico*es-redes {
+    display: flex !impo*tant;
+
+    align-items: center !im*ortant;
+    justify-content: cente* !important;
+
+    gap: 16px !impor*ant;
+}
+
+
+.link-social {
+    displa*: flex !important;
+
+    width: 52p* !important;
+    height: 52px !imp*rtant;
+
+    align-items: center !i*portant;
+    justify-content: cent*r !important;
+
+    box-sizing: bor*er-box !important;
+
+    border: 2p* solid #176B4C !important;
+    bor*er-radius: 50% !important;
+
+    ba*kground: #ffffff !important;
+    c*lor: #176B4C !important;
+
+    text*decoration: none !important;
+
+    *ox-shadow: 0 3px 8px rgba(0,0,0,0.*0) !important;
+}
+
+
+.icone-social {*    font-size: 26px !important;
+  * font-weight: 600 !important;
+    *ine-height: 1 !important;
+}
+
+/* ===*======================
+   FOOTER C*MPAL
+========================== */*
+.footer-compal {
+    display: blo*k !important;
+
+    width: 100% !im*ortant;
+
+    margin: 24px auto 0 !*mportant;
+    padding: 20px 0 28px*!important;
+
+    text-align: cente* !important;
+
+    color: #176B4C !*mportant;
+}
+
+
+.footer-logo {
+    d*splay: block !important;
+
+    marg*n: 0 auto 5px !important;
+
+    col*r: #176B4C !important;
+
+    font-f*mily: inherit !important;
+    font*size: 22px !important;
+    font-weight: 700 !important;
+}
+
+
+.footer-assinatura {
+    display: block !important;
+
+    color: #176B4C !important;
+
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+</style>
+
+
+</head>
+
+
+<body>
+
+<div class="mensagem-resultado">
+
+    <h1>🎉Parabéns! Descobriste a tua fruta!</h1>
+
+    <p>
+        A tua moldura está pronta! 📸
+</a>
+    </p>
+
+</div>
+
+
+
+
+<div class="editor">
+
+    <div class="molduraContainer">
+
+        <div class="janelaFoto">
+
+    <img
+        id="fotoNaMoldura"
+        alt="Fotografia escolhida"
+    >
+<div
+class="opcoes-foto-moldura"
+id="opcoesFotoMoldura"
+>
+<h2>CRIA A TUA FOTOGRAFIA</h2>
+<p></p>
+
+<label
+for="camera"
+class="botao-camera-moldura"
+>
+📸 TIRAR FOTOGRAFIA
+</label>
+
+<label
+for="foto"
+class="botao-galeria-moldura"
+>
+🖼️ ESCOLHER DA GALERIA
+</label>
+</div>
+</div
+  
+</div>
+
+ <img id="moldura" src="molduras/caju.png" alt="Moldura Caju">
+
+
+    </div>
+
+</div>
+<div
+    id="trocarFoto"
+    style="
+        display:none;
+        width:90%;
+        max-width:390px;
+        margin:18px auto 20px;
+        gap:12px;
+        justify-content:center;
+        align-items:center;
+    "
+>
+
+    <label
+        for="camera"
+        style="
+            display:flex;
+            flex:1;
+            min-height:48px;
+            padding:11px 12px;
+            box-sizing:border-box;
+            align-items:center;
+            justify-content:center;
+            border:2px solid #A94F3D;
+            border-radius:25px;
+            background:#A94F3D;
+            color:#ffffff;
+            font-family:inherit;
+            font-size:14px;
+            font-weight:500;
+            line-height:1.1;
+            text-align:center;
+            cursor:pointer;
+            box-shadow:0 3px 9px rgba(0,0,0,0.14);
+        "
+    >
+        📸 TIRAR OUTRA
+    </label>
+
+    <label
+        for="foto"
+        style="
+            display:flex;
+            flex:1;
+            min-height:48px;
+            padding:11px 12px;
+            box-sizing:border-box;
+            align-items:center;
+            justify-content:center;
+            border:2px solid #A94F3D;
+            border-radius:25px;
+            background:#ffffff;
+            color:#A94F3D;
+            font-family:inherit;
+            font-size:14px;
+            font-weight:500;
+            line-height:1.1;
+            text-align:center;
+            cursor:pointer;
+            box-shadow:0 3px 9px rgba(0,0,0,0.14);
+        "
+    >
+        🖼️ ESCOLHER OUTRA
+    </label>
+
+</div>
+<div class="zona-foto" id="zonaFoto">
+
+
+
+        <input
+            type="file"
+            id="camera"
+            accept="image/*"
+            capture="user"
+            hidden
+        >
+
+               <input
+            type="file"
+            id="foto"
+            accept="image/*"
+            hidden
+        >
+
+       <div class="zona-zoom escondida" id="zonaZoom">
+
+            <label for="zoom">
+                Ajusta a tua fotografia
+            </label>
+
+            <input
+                type="range"
+                id="zoom"
+                min="1"
+                max="3"
+                step="0.05"
+                value="1"
+            >
+<button
+    type="button"
+    id="fotoFeita"
+    onclick="mostrarResultadoFinal()"
+    style="
+        display:flex;
+        width:90%;
+        max-width:360px;
+        min-height:58px;
+        margin:22px auto 8px;
+        padding:14px 24px;
+        box-sizing:border-box;
+
+        align-items:center;
+        justify-content:center;
+
+        border:2px solid #A94F3D;
+        border-radius:30px;
+
+      background:#A94F3D;
+        color:#ffffff;
+
+        font-family:inherit;
+        font-size:30px;
+        font-weight:500;
+        line-height:1;
+
+        text-align:center;
+
+        cursor:pointer;
+
+        box-shadow:0 4px 12px rgba(0,0,0,0.18);
+
+        appearance:none;
+        -webkit-appearance:none;
+    "
+>
+    ✓ ESTÁ PERFEITO
+</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="zona-final" id="zonaFinal" style="display:none;">
+    <h2>A tua moldura está pronta!💚</h2>
+
+
+    </p>
+
+   
+
+    <button id="instagram">
+        📲Guardar e partilhar
+    </button>
+
+  <p class="lembrete">
+Marca a
+
+   <a
+    href="https://www.instagram.com/compalmocambique/"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="link-compal"
+>
+    @compalmocambique
+</a>
+<br>
+para receberes o teu prémio🎁
+</p>
+
+</div>
+
+<!-- REDES SOCIAIS -->
+
+<div
+    class="redes-sociais"
+    style="
+        display:block;
+        width:100%;
+        margin:28px auto 0;
+        text-align:center;
+        color:#176B4C;
+    "
+>
+
+    <p
+        style="
+            display:block;
+            width:100%;
+            margin:0 0 14px;
+            font-size:22px;
+            font-weight:500;
+            text-align:center;
+        "
+    >
+        SEGUE A COMPAL E ESTÁ ATENTO ÀS NOVIDADES
+    </p>
+
+
+    <!-- LINHA APENAS DOS 3 ÍCONES -->
+
+    <div
+        style="
+            display:flex;
+            width:100%;
+            justify-content:center;
+            align-items:center;
+            gap:22px;
+            margin:0 auto;
+        "
+    >
+
+        <!-- INSTAGRAM -->
+
+        <a
+            href="https://www.instagram.com/compalmocambique/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram Compal Moçambique"
+            style="
+                display:flex;
+                width:64px;
+                height:64px;
+                flex:none;
+                align-items:center;
+                justify-content:center;
+                text-decoration:none;
+            "
+        >
+            <img
+    src="imagensinstagram.svg"
+    alt=""
+    style="
+        display:block;
+        width:48px;
+        height:48px;
+        object-fit:contain;
+    "
+>
+        </a>
+
+
+        <!-- FACEBOOK -->
+
+        <a
+            href="https://www.facebook.com/compalmocambique/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook Compal Moçambique"
+            style="
+                display:flex;
+                width:64px;
+                height:64px;
+                flex:none;
+                align-items:center;
+                justify-content:center;
+                text-decoration:none;
+            "
+        >
+            <img
+    src="imagensfacebook.svg"
+    alt="Facebook"
+    style="
+        display:block;
+        width:48px;
+        height:48px;
+        object-fit:contain;
+    "
+>
+        </a>
+
+
+        <!-- TIKTOK -->
+
+        <a
+            href="https://www.tiktok.com/@compalmocambique"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="TikTok Compal Moçambique"
+            style="
+                display:flex;
+                width:64px;
+                height:64px;
+                flex:none;
+                align-items:center;
+                justify-content:center;
+                text-decoration:none;
+            "
+        >
+          <img
+    src="imagenstiktok.svg"
+    alt="TikTok"
+    style="
+        display:block;
+        width:48px;
+        height:48px;
+        object-fit:contain;
+    "
+>
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- LOGO COMPAL: BLOCO TOTALMENTE SEPARADO -->
+
+<div
+    style="
+        display:block;
+        width:100%;
+        clear:both;
+        margin:20px 0 0;
+        padding:0 0 30px;
+        text-align:center;
+    "
+>
+
+<img
+    src="logocompal.svg"
+    alt="Compal"
+    style="
+        display:block;
+        width:110px;
+        height:auto;
+        margin:0 auto 8px;
+        object-fit:contain;
+    "
+>
+
+    <div
+        style="
+            display:block;
+            width:100%;
+            margin:-18px 0 0;
+            color:#176B4C;
+            font-size:14px;
+            font-weight:500;
+            line-height:1.2;
+            text-align:center;
+        "
+    >
+        COMPAL. É MESMO NATURAL.
+    </div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+const opcoesFotoMoldura =
+    document.getElementById("opcoesFotoMoldura");
+const fotoInput = document.getElementById("foto");
+const cameraInput = document.getElementById("camera");
+const fotoNaMoldura = document.getElementById("fotoNaMoldura");
+const zoomInput = document.getElementById("zoom");
+const zonaFinal = document.getElementById("zonaFinal");
+const zonaZoom = document.getElementById("zonaZoom");
+
+let estaAArrastar = false;
+let inicioX = 0;
+let inicioY = 0;
+let posicaoX = 0;
+let posicaoY = 0;
+let zoom = 1;
+
+function atualizarFotografia() {
+    fotoNaMoldura.style.transform =
+        `translate(calc(-50% + ${posicaoX}px), calc(-50% + ${posicaoY}px)) scale(${zoom})`;
+}
+
+function carregarFotografia(ficheiro) {
+    if (!ficheiro) {
+        return;
+    }
+
+    posicaoX = 0;
+    posicaoY = 0;
+    zoom = 1;
+
+    zoomInput.value = 1;
+
+    fotoNaMoldura.src = URL.createObjectURL(ficheiro);
+    fotoNaMoldura.style.display = "block";
+
+
+    atualizarFotografia();
+
+zonaZoom.classList.remove("escondida");
+document.getElementById("trocarFoto").style.display = "flex";
+zonaFinal.classList.remove("escondida");
+
+setTimeout(function () {
+    zonaFinal.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}, 300);
+}
+
+fotoInput.addEventListener("change", function () {
+    carregarFotografia(fotoInput.files[0]);
+});
+
+cameraInput.addEventListener("change", function () {
+    carregarFotografia(cameraInput.files[0]);
+});
+
+fotoNaMoldura.addEventListener("pointerdown", function (evento) {
+    estaAArrastar = true;
+
+    inicioX = evento.clientX - posicaoX;
+    inicioY = evento.clientY - posicaoY;
+
+    fotoNaMoldura.setPointerCapture(evento.pointerId);
+    fotoNaMoldura.style.cursor = "grabbing";
+});
+
+fotoNaMoldura.addEventListener("pointermove", function (evento) {
+    if (!estaAArrastar) {
+        return;
+    }
+
+    posicaoX = evento.clientX - inicioX;
+    posicaoY = evento.clientY - inicioY;
+
+    atualizarFotografia();
+});
+
+fotoNaMoldura.addEventListener("pointerup", function (evento) {
+    estaAArrastar = false;
+
+    if (fotoNaMoldura.hasPointerCapture(evento.pointerId)) {
+        fotoNaMoldura.releasePointerCapture(evento.pointerId);
+    }
+
+    fotoNaMoldura.style.cursor = "grab";
+});
+
+zoomInput.addEventListener("input", function () {
+    zoom = Number(zoomInput.value);
+    atualizarFotografia();
+});
+
+
+const partilharBotao = document.getElementById("instagram");
+const moldura = document.getElementById("moldura");
+
+
+/* ==================================
+   CRIAR IMAGEM FINAL
+================================== */
+
+function criarImagemFinal(callback) {
+
+    if (!fotoNaMoldura.src) {
+        alert("Escolhe ou tira uma fotografia primeiro.");
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = moldura.naturalWidth;
+    canvas.height = moldura.naturalHeight;
+
+    const escalaX = canvas.width / moldura.clientWidth;
+    const escalaY = canvas.height / moldura.clientHeight;
+
+    const janela = document.querySelector(".janelaFoto");
+    const editor = document.querySelector(".editor");
+
+    const janelaRect = janela.getBoundingClientRect();
+    const editorRect = editor.getBoundingClientRect();
+
+    const janelaX =
+        (janelaRect.left - editorRect.left) * escalaX;
+
+    const janelaY =
+        (janelaRect.top - editorRect.top) * escalaY;
+
+    const janelaLargura =
+        janelaRect.width * escalaX;
+
+    const janelaAltura =
+        janelaRect.height * escalaY;
+
+
+    /* RECORTE DA FOTOGRAFIA */
+
+    ctx.save();
+
+    ctx.beginPath();
+
+    if (typeof ctx.roundRect === "function") {
+
+        ctx.roundRect(
+            janelaX,
+            janelaY,
+            janelaLargura,
+            janelaAltura,
+            35 * escalaX
+        );
+
+    } else {
+
+        ctx.rect(
+            janelaX,
+            janelaY,
+            janelaLargura,
+            janelaAltura
+        );
+    }
+
+    ctx.clip();
+
+
+    /* PROPORÇÕES DA FOTOGRAFIA */
+
+    const proporcaoImagem =
+        fotoNaMoldura.naturalWidth /
+        fotoNaMoldura.naturalHeight;
+
+    const proporcaoCaixa =
+        janelaLargura /
+        janelaAltura;
+
+    let sx;
+    let sy;
+    let sw;
+    let sh;
+
+    if (proporcaoImagem > proporcaoCaixa) {
+
+        sh = fotoNaMoldura.naturalHeight;
+        sw = sh * proporcaoCaixa;
+
+        sx =
+            (fotoNaMoldura.naturalWidth - sw) / 2;
+
+        sy = 0;
+
+    } else {
+
+        sw = fotoNaMoldura.naturalWidth;
+        sh = sw / proporcaoCaixa;
+
+        sx = 0;
+
+        sy =
+            (fotoNaMoldura.naturalHeight - sh) / 2;
+    }
+
+
+    /* POSIÇÃO + ZOOM */
+
+    const imagemLargura =
+        janelaLargura * zoom;
+
+    const imagemAltura =
+        janelaAltura * zoom;
+
+    const imagemX =
+        janelaX +
+        (janelaLargura - imagemLargura) / 2 +
+        posicaoX * escalaX;
+
+    const imagemY =
+        janelaY +
+        (janelaAltura - imagemAltura) / 2 +
+        posicaoY * escalaY;
+
+
+    /* DESENHAR FOTOGRAFIA */
+
+    ctx.drawImage(
+        fotoNaMoldura,
+        sx,
+        sy,
+        sw,
+        sh,
+        imagemX,
+        imagemY,
+        imagemLargura,
+        imagemAltura
+    );
+
+    ctx.restore();
+
+
+    /* MOLDURA POR CIMA */
+
+    ctx.drawImage(
+        moldura,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /* GERAR PNG */
+
+    canvas.toBlob(function (blob) {
+
+        if (!blob) {
+            alert("Não foi possível criar a imagem.");
+            return;
+        }
+
+        callback(blob);
+
+    }, "image/png");
+}
+
+
+
+
+/* ==================================
+   PARTILHAR
+================================== */
+
+partilharBotao.addEventListener("click", function () {
+
+    criarImagemFinal(async function (blob) {
+
+        const ficheiro = new File(
+            [blob],
+            "a-minha-fruta-compal.png",
+            {
+                type: "image/png"
+            }
+        );
+
+        const dadosPartilha = {
+            files: [ficheiro]
+        };
+
+        if (
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare(dadosPartilha)
+        ) {
+
+            try {
+
+                await navigator.share(dadosPartilha);
+
+            } catch (erro) {
+
+                if (erro.name !== "AbortError") {
+                    console.error(erro);
+                    alert(
+                        "Não foi possível abrir a partilha neste dispositivo."
+                    );
+                }
+
+            }
+
+        } else {
+
+            alert(
+                "Neste dispositivo, guarda primeiro a fotografia e depois partilha-a através da aplicação que preferires."
+            );
+
+        }
+
+    });
+
+});
+
+function mostrarResultadoFinal() {
+
+    const zonaFinal =
+        document.getElementById("zonaFinal");
+
+    zonaFinal.style.display = "block";
+
+    zonaFinal.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
+
+</script>
+
+
+</body>
+
+</html>
